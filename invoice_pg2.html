@@ -109,7 +109,7 @@ ul
 
 <p class=MsoHeader align=right style='text-align:right'><a name="_Hlk109551734"><span
 style='font-size:14.0pt;font-family:"Work Sans";color:#767171'>INVOICE: </span></a><span
-style='font-size:14.0pt;font-family:"Work Sans SemiBold";color:#767171'>#10021</span></p>
+style='font-size:14.0pt;font-family:"Work Sans SemiBold";color:#767171'>#{{invoice_num}}</span></p>
 
 <p class=MsoNormal>&nbsp;</p>
 
@@ -169,7 +169,7 @@ style='font-size:14.0pt;font-family:"Work Sans SemiBold";color:#767171'>#10021</
   background:#9CC2E5;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal align=right style='margin-bottom:0in;text-align:right;
   line-height:normal'><b><i><span style='font-family:"Work Sans";color:black'>$
-  50.63</span></i></b></p>
+  {{subtotal_init}}</span></i></b></p>
   </td>
  </tr>
  <tr>
@@ -208,53 +208,8 @@ style='font-size:14.0pt;font-family:"Work Sans SemiBold";color:#767171'>#10021</
   line-height:normal'><span style='font-family:"Work Sans SemiBold";color:black'>Cost</span></p>
   </td>
  </tr>
- <tr>
-  <td width=222 valign=top style='width:166.35pt;border:solid #AEAAAA 1.0pt;
-  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal style='margin-bottom:0in;line-height:normal'><span
-  style='font-family:"Work Sans"'>Pre-existing Friendship</span></p>
-  </td>
-  <td width=294 style='width:220.5pt;border-top:none;border-left:none;
-  border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoListParagraph style='margin-bottom:0in;text-indent:-.25in;
-  line-height:normal'><span style='font-family:"Work Sans"'>-<span
-  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-family:"Work Sans"'>Client allotted friendship discount (10.00%)
-  off <br>
-  prev. subtotal ($50.63)</span></p>
-  </td>
-  <td width=108 style='width:80.65pt;border-top:none;border-left:none;
-  border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal align=right style='margin-bottom:0in;text-align:right;
-  line-height:normal'><span style='font-family:"Work Sans"'>(-) $ 5.06</span></p>
-  </td>
- </tr>
- <tr>
-  <td width=222 valign=top style='width:166.35pt;border:solid #AEAAAA 1.0pt;
-  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal style='margin-bottom:0in;line-height:normal'><span
-  style='font-family:"Work Sans"'>Returning Customer</span></p>
-  </td>
-  <td width=294 style='width:220.5pt;border-top:none;border-left:none;
-  border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoListParagraphCxSpFirst style='margin-bottom:0in;text-indent:-.25in;
-  line-height:normal'><span style='font-family:"Work Sans"'>-<span
-  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-family:"Work Sans"'>Client allotted returning customer discount
-  (05.00%) off</span></p>
-  <p class=MsoListParagraphCxSpLast style='margin-bottom:0in;line-height:normal'><span
-  style='font-family:"Work Sans"'>prev. subtotal ($50.63)</span></p>
-  </td>
-  <td width=108 style='width:80.65pt;border-top:none;border-left:none;
-  border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
-  padding:0in 5.4pt 0in 5.4pt'>
-  <p class=MsoNormal align=right style='margin-bottom:0in;text-align:right;
-  line-height:normal'><span style='font-family:"Work Sans"'>(-) $ 2.53</span></p>
-  </td>
- </tr>
+{{disc_list}}
+
  <tr>
   <td width=222 valign=top style='width:166.35pt;border:none;border-bottom:
   solid #AEAAAA 1.0pt;padding:0in 5.4pt 0in 5.4pt'>
@@ -284,14 +239,14 @@ style='font-size:14.0pt;font-family:"Work Sans SemiBold";color:#767171'>#10021</
   <p class=MsoListParagraph style='margin-bottom:0in;text-indent:-.25in;
   line-height:normal'><span style='font-family:"Work Sans"'>-<span
   style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-family:"Work Sans";color:black'>Incl. All Discounts: (-) $7.59</span></p>
+  style='font-family:"Work Sans";color:black'>Incl. All Discounts: (-) ${{disc_total}}</span></p>
   </td>
   <td width=108 valign=top style='width:80.65pt;border-top:none;border-left:
   none;border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
   background:#9CC2E5;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal align=right style='margin-bottom:0in;text-align:right;
   line-height:normal'><b><i><span style='font-family:"Work Sans";color:black'>$
-  43.03</span></i></b></p>
+  {{subtotal_full}}</span></i></b></p>
   </td>
  </tr>
  <tr>
@@ -306,7 +261,7 @@ style='font-size:14.0pt;font-family:"Work Sans SemiBold";color:#767171'>#10021</
   <p class=MsoListParagraph style='margin-bottom:0in;text-indent:-.25in;
   line-height:normal'><span style='font-family:"Work Sans"'>-<span
   style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
-  style='font-family:"Work Sans";color:black'>Sales Tax (6.25%) </span></p>
+  style='font-family:"Work Sans";color:black'>Sales Tax ({{tax_percentage}}%) </span></p>
   </td>
   <td width=108 valign=top style='width:80.65pt;border-top:none;border-left:
   none;border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
@@ -349,7 +304,7 @@ style='font-size:14.0pt;font-family:"Work Sans SemiBold";color:#767171'>#10021</
   none;border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
   background:#C5E0B3;padding:0in 5.4pt 0in 5.4pt'>
   <p class=MsoNormal align=right style='margin-bottom:0in;text-align:right;
-  line-height:normal'><b><span style='font-family:"Work Sans";color:black'>$ 45.72</span></b></p>
+  line-height:normal'><b><span style='font-family:"Work Sans";color:black'>$ {{price_total}}</span></b></p>
   </td>
  </tr>
 </table>
@@ -375,7 +330,7 @@ physical cash (USD) <br>
 
 <p class=MsoNormal style='text-align:justify;line-height:normal'><i><span
 style='font-size:9.0pt;font-family:"Work Sans Light";letter-spacing:.6pt'>*
-Please note that all non-cash payment methods will introduce an additional 30% processing
+Please note that all non-cash payment methods will introduce an additional 30% convenience
 fee to the total.</span></i></p>
 
 <p class=MsoNormal align=center style='text-align:center'><b><span

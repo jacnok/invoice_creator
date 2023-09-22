@@ -32,6 +32,7 @@ pg1_context = \
 
 charge_list = ""                            # will be raw HTML, consisting of <tr> of charge_HTML_forms all smashed together
 disc_list = ""                              # will be raw HTML, consisting of <tr> of disc_HTML_forms all smashed together
+
 due_by = "March XX, 2099"                   # Month DD, YYYY
 
 charge_HTML_form = """
@@ -60,7 +61,29 @@ charge_HTML_form = """
 
 charge_HTML_form_new = ""
 
-disc_HTML_form = """..."""
+disc_HTML_form = """
+ <tr>
+  <td width=222 valign=top style='width:166.35pt;border:solid #AEAAAA 1.0pt;
+  border-top:none;padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal style='margin-bottom:0in;line-height:normal'><span
+  style='font-family:"Work Sans"'>{disc_type}</span></p>
+  </td>
+  <td width=294 style='width:220.5pt;border-top:none;border-left:none;
+  border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoListParagraph style='margin-bottom:0in;text-indent:-.25in;
+  line-height:normal'><span style='font-family:"Work Sans"'>-<span
+  style='font:7.0pt "Times New Roman"'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span></span><span
+  style='font-family:"Work Sans"'>{disc_reason}</p>
+  </td>
+  <td width=108 style='width:80.65pt;border-top:none;border-left:none;
+  border-bottom:solid #AEAAAA 1.0pt;border-right:solid #AEAAAA 1.0pt;
+  padding:0in 5.4pt 0in 5.4pt'>
+  <p class=MsoNormal align=right style='margin-bottom:0in;text-align:right;
+  line-height:normal'><span style='font-family:"Work Sans"'>(-) $ {disc_cost}</span></p>
+  </td>
+ </tr>
+"""
 
 disc_HTML_form_new = ""
 
@@ -70,12 +93,16 @@ alt_payments = """..."""
 service = []
 rationale = []
 rate = []
-price = []
+price = [0.00]
+p_total = sum(price)
 
-discount = []
-reasoning = []
-percentage = []
-cost = []
+disc_type = []
+disc_reason = []
+percentages = []
+disc_cost = []
+tax_perc = 0.00
+
+
 
 for x in service:
     charge_HTML_form_new = charge_HTML_form.format(
@@ -85,11 +112,13 @@ for x in service:
     charge_list = charge_list + charge_HTML_form_new
 
 
-
 pg2_context = \
     {
         "charge_list": charge_list,
         "due_by": due_by,
+        "price_total": p_total,
+        "tax_percentage": tax_perc,
+        "disc_total": sum(disc_cost),
         ...: ...
     }
 
