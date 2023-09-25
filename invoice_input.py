@@ -1,6 +1,5 @@
 import pylightxl as pxl
 import PySimpleGUIQt as sGUI
-
 import sys
 
 class InvInput:
