@@ -23,11 +23,9 @@ proj_name = obj.proj_name
 delivery_date = obj.delivery_date
 delivery_method = obj.delivery_method
 
-money_fmt = "{:.2f}"
 
-
-# def money(x):
-#     return "{:.2f}".format(x)
+def money(x):
+    return "{:.2f}".format(x)
 
 
 def open_file(x):
@@ -152,7 +150,7 @@ for x in range(len(service)):
     charge_HTML_form_new = charge_HTML_form.format(
                             service=service[x],
                             rationale=rationale[x],
-                            price=money_fmt.format(float(price[x]))
+                            price=money(float(price[x]))
     )
     charge_list = charge_list + charge_HTML_form_new
 
@@ -160,7 +158,7 @@ for x in range(len(disc_type)):
     disc_HTML_form_new = disc_HTML_form.format(
                             disc_type=disc_type[x],
                             disc_reason=disc_reason[x],
-                            disc_cost=money_fmt.format(float(disc_cost[x]))
+                            disc_cost=money(float(disc_cost[x]))
     )
     disc_list = disc_list + disc_HTML_form_new
 
@@ -173,12 +171,12 @@ pg2_context = \
         "charge_list": charge_list,
         "disc_list": disc_list,
         "due_by": due_by,
-        "subtotal_init": money_fmt.format(p_total),
-        "subtotal_full": money_fmt.format(subtotal_full),
-        "price_total": money_fmt.format(price_total),
-        "tax_total": money_fmt.format(tax_total),
+        "subtotal_init": money(p_total),
+        "subtotal_full": money(subtotal_full),
+        "price_total": money(price_total),
+        "tax_total": money(tax_total),
         "tax_percentage": (tax_perc * 100),
-        "disc_total": money_fmt.format(disc_total),
+        "disc_total": money(disc_total),
         'invoice_num': invoice_num,
     }
 
