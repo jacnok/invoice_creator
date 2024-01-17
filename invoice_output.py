@@ -6,17 +6,14 @@ obj = io_in.InvInput()                              # this should be pulling eve
 obj.my_gui_creator()
 
 # this all needs to go into an Excel sheet that gets called from io_in, and passed along
-my_address_l1 = "XXXX streetFN Avenue"
-my_address_l2 = "Chicago, IL 00000"
-my_phone_num = "XXX-XXX-XXXX"
+company_name = obj.company_name
+my_address_l1 = obj.my_address_l1
+my_address_l2 = obj.my_address_l2
+my_phone_num = obj.my_phone_num
+my_contact_l1 = obj.my_contact_l1
+my_contact_l2 = obj.my_contact_l2
 
 # this all goes into a different Excel sheet that gets called from io_in, and passed along
-# invoice_num = 10000                                 # cannot be lower than 10000
-# client_name = "clientFN clientLN"                   # can also just be clientName
-# proj_name = "artistName, songName - projectType"    # can also just be projectName
-# delivery_date = "January XX, 2099"                  # Month DD, YYYY
-# delivery_method = "snail mail"                      # ex: a YouTube channel upload, a Google Drive upload, etc.
-
 invoice_num = obj.invoice_num
 client_name = obj.client_name
 proj_name = obj.proj_name
@@ -48,9 +45,12 @@ def round_t(val, digits):
 
 pg1_context = \
     {
+        'company_name': company_name,
         'my_address_l1': my_address_l1,
         'my_address_l2': my_address_l2,
         'my_phone_num': my_phone_num,
+        'my_contact_l1': my_contact_l1,
+        'my_contact_l2': my_contact_l2,
 
         'invoice_num': invoice_num,
 
@@ -63,8 +63,10 @@ pg1_context = \
 
 print(pg1_context)
 
-charge_list = ""                            # will be raw HTML, consisting of <tr> of charge_HTML_forms all smashed together
-disc_list = ""                              # will be raw HTML, consisting of <tr> of disc_HTML_forms all smashed together
+# will be raw HTML, consisting of <tr> of charge_HTML_forms all smashed together
+charge_list = ""
+# will be raw HTML, consisting of <tr> of disc_HTML_forms all smashed together
+disc_list = ""
 
 due_by = obj.due_by                  # Month DD, YYYY
 
@@ -120,8 +122,8 @@ disc_HTML_form = """
 
 disc_HTML_form_new = ""
 
-
-alt_payments = """..."""
+# DONE: pull in alt_payments from invoice_input
+alt_payments = obj.alt_payments
 
 service = obj.service
 rationale = obj.serv_rationale
@@ -138,7 +140,6 @@ disc_reason = obj.disc_reason
 percentages = obj.disc_percs
 disc_cost = obj.disc_cost
 tax_perc = obj.tax_perc
-
 
 
 disc_total = 0.00
@@ -178,6 +179,7 @@ pg2_context = \
         "tax_percentage": (tax_perc * 100),
         "disc_total": money(disc_total),
         'invoice_num': invoice_num,
+        "alt_payments": alt_payments
     }
 
 

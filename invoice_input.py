@@ -1,10 +1,15 @@
 import pylightxl as pxl
 import PySimpleGUIQt as sGUI
 import sys
+import os
+import unicodedata
+import re
+from dotenv import load_dotenv
+
+
 
 class InvInput:
     def __init__(self):
-
 
         self.title_list = []
         self.detail_list = []
@@ -26,12 +31,21 @@ class InvInput:
         self.disc_cost = []
         self.tax_perc = 0.0
 
-        self.invoice_num = 00000  # cannot be lower than 10000
-        self.client_name = "clientFN1 clientLN2"  # can also just be clientName
-        self.proj_name = "artistName1, songName2 - projectType3"  # can also just be projectName
-        self.delivery_date = "November XX, 2099"  # Month DD, YYYY
-        self.delivery_method = "snail mail via parcel express"  # ex: a YouTube channel upload, a Google Drive upload, etc.
-        self.due_by = "December XX, 2199" # Month DD, YYYY
+        self.invoice_num = 00000                                    # cannot be lower than 10000
+        self.client_name = "clientFN1 clientLN2"                    # can also just be clientName
+        self.proj_name = "artistName1, songName2 - projectType3"    # can also just be projectName
+        self.delivery_date = "November XX, 2099"                    # Month DD, YYYY
+        self.delivery_method = "snail mail"                         # ex: a YouTube channel upload, a Google Drive upload, etc.
+        self.due_by = "December XX, 2199"                           # Month DD, YYYY
+
+        self.company_name = "Jefferson"
+        self.my_address_l1 = "XXXX streetFN Avenue"
+        self.my_address_l2 = "Chicago, IL 00000"
+        self.my_phone_num = "XXX-XXX-XXXX"
+        self.my_contact_l1 = "example.me"
+        self.my_contact_l2 = "python-dev@example.me"
+
+        self.alt_payments = """"""
 
     def get_detail_from_title(self, x):
         return self.detail_list[self.title_list.index(x)]
@@ -42,33 +56,43 @@ class InvInput:
     def get_perc_from_category(self, x):
         return self.percentage_list[self.category_list.index(x)]
 
-    def importer(self, f_name1, f_name2, output_place):
-        proj_data = pxl.readxl(f_name1)
-        # bkg_data = pxl.readxl(f_name2)
+    def open_read_writeHTMLline(self, x):
+        y = """"""
 
-        # proj_full_list = []
-        # proj_dict = [{      "title": "Invoice Number",
-        #                     "details": ...,
-        #                     "serv_rationale": ...,
-        #                     "hours": ...
-        #
-        #             }]
+        with open(x, encoding='UTF-8') as my_file:
+            for line in my_file:
+                y += self.replace_quotes(line) + "<br>"
+                print(line)
+        return y
+
+    def replace_quotes(self, x):
+        a = unicodedata.normalize("NFKD", str(x))
+        b = re.sub("[“]+", "&ldquo;", a)
+        y = re.sub("[”]+", "&rdquo;", b)
+        return y
+
+    def importer(self, f_name1, f_name2, output_place):
+
+        load_dotenv()
+
+        # reads from .env to prevent unnecessary private data leakage
+        self.company_name = os.getenv('COMPANY_NAME')
+        self.my_address_l1 = os.getenv('ADDRESS_01')
+        self.my_address_l2 = os.getenv('ADDRESS_02')
+        self.my_phone_num = os.getenv('CONTACT_NUM')
+        self.my_contact_l1 = os.getenv('CONTACT_01')
+        self.my_contact_l2 = os.getenv('CONTACT_02')
+
+        self.alt_payments = self.open_read_writeHTMLline("alt_payments.txt")
+
+        proj_data = pxl.readxl(f_name1)
 
         proj_col_list = []
 
-        # for row in proj_data.ws(ws='Sheet1').rows:
-        #     proj_full_list.append(row)
-        #     print(row)
-        # ...
-
         for col in proj_data.ws(ws='Sheet1').cols:
             proj_col_list.append(col)
-            # print(col)
 
         # borrowing this from https://stackoverflow.com/questions/10993612/how-to-remove-xa0-from-string-in-python
-
-        import unicodedata
-        import re
 
         for a in range(len(proj_col_list)):
             for b in range(len(proj_col_list[a])):
@@ -76,7 +100,7 @@ class InvInput:
                 c = unicodedata.normalize("NFKD", str(proj_col_list[a][b]))
                 proj_col_list[a][b] = re.sub("[’]+", "&rsquo;", c)
 
-        # print(proj_col_list)
+        # print(proj_col_list) # debug statement
 
         self.title_list = proj_col_list[0]
         self.detail_list = proj_col_list[1]
@@ -114,32 +138,23 @@ class InvInput:
                 self.disc_cost.append(self.price_list[x])
                 print("Disc was run")       # debug statement
 
-        print("this is the list of charges:")
-        for x in range(len(self.service)):
-            print(f"\nService: {self.service[x]} "
-                  f"\n\t Service Rationale: {self.serv_rationale[x]}"
-                  f"\n\t Service Rate: {self.serv_rate[x]}"
-                  f"\n\t Service Price: {self.serv_price[x]}"
-                  )
+        # print("this is the list of charges:") # debug sequence
+        # for x in range(len(self.service)):
+        #     print(f"\nService: {self.service[x]} "
+        #           f"\n\t Service Rationale: {self.serv_rationale[x]}"
+        #           f"\n\t Service Rate: {self.serv_rate[x]}"
+        #           f"\n\t Service Price: {self.serv_price[x]}"
+        #           )   # debug sequence
 
         self.tax_perc = float(self.get_perc_from_category("Tax"))
-        print("This is the tax percentage: " + str((self.tax_perc * 100)) + "%")
+        # print("This is the tax percentage: " + str((self.tax_perc * 100)) + "%")    # debug statement
 
-        p_total = 0.00
+        # p_total = 0.00
+        #
+        # for x in self.serv_price:
+        #     p_total = p_total + float(x)
+        # print("This is the subtotal before discounts or taxes: " + "${:.2f}".format(p_total))   # debug sequence
 
-        for x in self.serv_price:
-            p_total = p_total + float(x)
-
-        print("This is the subtotal before discounts or taxes: " + "${:.2f}".format(p_total))
-
-        # [[x,x,x,x,x,x,x], [x,x,x,x,x,x], [...], ...]
-
-        # for x in proj_full_list:
-        #     proj_dict.append([])
-        #     for y in range(7):
-        #         match y:
-        #             case 0:
-        #                 proj_dict[x].update({})
 
     def my_gui_creator(self):
         sGUI.theme('Dark2')
