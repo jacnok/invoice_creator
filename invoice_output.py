@@ -185,6 +185,8 @@ pg2_context = \
 
 def template_creator():
 
+    import pathlib
+
     template_loader = jinja2.FileSystemLoader('./')   # indicates folder where current HTML template is located.
 
     template_env = jinja2.Environment(loader = template_loader)
@@ -199,6 +201,25 @@ def template_creator():
 
     pdfkit.from_string(output_text1, 'pg1_generated.pdf', configuration=config)
     pdfkit.from_string(output_text2, 'pg2_generated.pdf', configuration=config)
+
+    # following this process to merge files: https://stackoverflow.com/a/37945454
+
+    import fitz
+
+    result = fitz.open()
+
+    for pdf in ['pg1_generated.pdf', 'pg2_generated.pdf']:
+        with fitz.open(pdf) as mfile:
+            result.insert_pdf(mfile)
+
+    # from here: https://stackoverflow.com/a/47651935
+
+    p = pathlib.Path("output/")
+    p.mkdir(parents=True, exist_ok=True)
+    fn = client_name + " - Invoice #" + invoice_num + ".pdf"
+    filepath = p / fn
+
+    result.save(filepath)
 
 
 template_creator()
