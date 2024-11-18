@@ -1,11 +1,14 @@
+from future.backports.datetime import datetime
+
 import invoice_input as io_in
 import jinja2
 import pdfkit
+import datetime as dt1
 
 obj = io_in.InvInput()                              # this should be pulling everything from the input files
 obj.my_gui_creator()
 
-# this all needs to go into an Excel sheet that gets called from io_in, and passed along
+# this all comes from environment vars that gets called from io_in, and passed along
 company_name = obj.company_name
 my_address_l1 = obj.my_address_l1
 my_address_l2 = obj.my_address_l2
@@ -15,10 +18,18 @@ my_contact_l2 = obj.my_contact_l2
 
 # this all goes into a different Excel sheet that gets called from io_in, and passed along
 invoice_num = obj.invoice_num
+form_type = obj.form_type + ":"
 client_name = obj.client_name
 proj_name = obj.proj_name
 delivery_date = obj.delivery_date
 delivery_method = obj.delivery_method
+
+
+def human_date(x):
+    y = x.split("/")
+    a = dt1.datetime(int(y[0]), int(y[1]), int(y[2]))
+    output = f"{a:%B %d, %Y}"
+    return output
 
 
 def money(x):
@@ -37,7 +48,14 @@ def open_file(x):
 
 # borrowed from this: https://stackoverflow.com/a/38239630 to solve rounding issues
 def round_t(val, digits):
-    return round(val+10**(-len(str(val))-1), digits)
+    x = round(val+10**(-len(str(val))-1), digits)
+
+    if x >= 0:
+        pass
+    else:
+        x = 0
+
+    return x
 
 # this will be how we do most of this:
 # https://towardsdatascience.com/how-to-easily-create-a-pdf-file-with-python-in-3-steps-a70faaf5bed5
@@ -53,10 +71,11 @@ pg1_context = \
         'my_contact_l2': my_contact_l2,
 
         'invoice_num': invoice_num,
+        'form_type': form_type,
 
         'client_name': client_name,
         'proj_name': proj_name,
-        'delivery_date': delivery_date,
+        'delivery_date': human_date(delivery_date),
         'delivery_method': delivery_method,
 
     }
@@ -124,6 +143,7 @@ disc_HTML_form_new = ""
 
 # DONE: pull in alt_payments from invoice_input
 alt_payments = obj.alt_payments
+alt_pay_warning = obj.alt_pay_warning
 
 service = obj.service
 rationale = obj.serv_rationale
@@ -171,7 +191,7 @@ pg2_context = \
     {
         "charge_list": charge_list,
         "disc_list": disc_list,
-        "due_by": due_by,
+        "due_by": human_date(due_by),
         "subtotal_init": money(p_total),
         "subtotal_full": money(subtotal_full),
         "price_total": money(price_total),
@@ -179,7 +199,9 @@ pg2_context = \
         "tax_percentage": (tax_perc * 100),
         "disc_total": money(disc_total),
         'invoice_num': invoice_num,
-        "alt_payments": alt_payments
+        "alt_payments": alt_payments,
+        "alt_pay_warning": alt_pay_warning,
+        'form_type': form_type,
     }
 
 
@@ -216,7 +238,8 @@ def template_creator():
 
     p = pathlib.Path("output/")
     p.mkdir(parents=True, exist_ok=True)
-    fn = client_name + " - Invoice #" + invoice_num + ".pdf"
+    # fn = client_name + " - Invoice #" + invoice_num + ".pdf"
+    fn = f'{client_name} - {obj.form_type.capitalize()} #{invoice_num}.pdf'
     filepath = p / fn
 
     result.save(filepath)

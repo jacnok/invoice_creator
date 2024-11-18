@@ -1,11 +1,12 @@
+# from multiprocessing.managers import Value (I DID NOT WRITE THIS??? Thanks, IDE)
+
 import pylightxl as pxl
-import PySimpleGUIQt as sGUI
+import PySimpleGUIQt as sGUI    # TODO: replace with FreeSimpleGui (https://github.com/spyoungtech/FreeSimpleGUI)
 import sys
 import os
 import unicodedata
 import re
 from dotenv import load_dotenv
-
 
 
 class InvInput:
@@ -44,8 +45,10 @@ class InvInput:
         self.my_phone_num = "XXX-XXX-XXXX"
         self.my_contact_l1 = "example.me"
         self.my_contact_l2 = "python-dev@example.me"
+        self.form_type = "FORM"
 
         self.alt_payments = """"""
+        self.alt_pay_warning = """"""
 
     def get_detail_from_title(self, x):
         return self.detail_list[self.title_list.index(x)]
@@ -84,6 +87,7 @@ class InvInput:
         self.my_contact_l2 = os.getenv('CONTACT_02')
 
         self.alt_payments = self.open_read_writeHTMLline("alt_payments.txt")
+        self.alt_pay_warning = self.open_read_writeHTMLline("alt_pay_warning.txt")
 
         proj_data = pxl.readxl(f_name1)
 
@@ -113,6 +117,14 @@ class InvInput:
 
         print("\n\nThis is the category list:")
         print(self.category_list)
+
+        try:
+            self.form_type = self.get_detail_from_title("Form Type").upper()
+        except ValueError:
+            print("Probably just an invoice.")
+            self.form_type = "INVOICE"
+        else:
+            print("how did we get here?")
 
         self.invoice_num = self.get_detail_from_title("Invoice Number")
         print("This is the invoice number: " + self.invoice_num)
